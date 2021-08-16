@@ -1,0 +1,46 @@
+create table if not exists Genre (
+id SERIAL primary key,
+name VARCHAR(40) not null
+);
+
+create table if not exists Actors (
+id SERIAL primary key,
+name VARCHAR(40) not null unique
+);
+
+create table if not exists Albums (
+id SERIAL primary key,
+name VARCHAR(40) not null,
+year INTEGER check(year>1900) not null
+);
+
+create table if not exists Tracks (
+id SERIAL primary key,
+name VARCHAR(40) not null,
+duration INTEGER not null,
+Albums_id integer references Albums(id) not null
+);
+
+create table if not exists Collection (
+id SERIAL primary key,
+name VARCHAR(40) not null,
+year INTEGER not null
+);
+
+create table if not exists TracksCollection (
+Tracks_id integer references Tracks(id),
+Collection_id integer references Collection(id),
+constraint tk primary key (Tracks_id, Collection_id)
+);
+
+create table if not exists ActorsAlbums (
+Actors_id integer references Actors(id),
+Albums_id integer references Albums(id),
+constraint aa primary key (Actors_id, Albums_id)
+);
+
+create table if not exists GenreActors (
+Genre_id integer references Genre(id),
+Actors_id integer references Actors(id),
+constraint ga primary key (Genre_id, Actors_id)
+);
